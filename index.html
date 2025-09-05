@@ -16,19 +16,18 @@
       position: relative;
     }
 
-    /* Carta completa con 2 páginas */
+    /* Carta */
     .card {
       width: 600px;
       height: 500px;
       perspective: 2000px;
       cursor: pointer;
       position: relative;
-      display: flex;
     }
 
-    /* Portada (lado derecho) */
+    /* Portada ocupa todo el ancho al inicio */
     .cover {
-      width: 50%;
+      width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #ff6b6b, #feca57);
       color: white;
@@ -37,7 +36,7 @@
       align-items: center;
       font-size: 1.8em;
       font-weight: bold;
-      border-radius: 0 15px 15px 0;
+      border-radius: 15px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       position: absolute;
       right: 0;
@@ -46,19 +45,33 @@
       transition: transform 1.5s ease-in-out;
       text-align: center;
       padding: 20px;
+      z-index: 2;
+    }
+
+    /* Interior contenedor */
+    .inside {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .inside-left, .inside-right {
+      width: 50%;
+      height: 100%;
     }
 
     /* Página izquierda (foto) */
     .inside-left {
-      width: 50%;
-      height: 100%;
       background: #fff;
-      border-radius: 15px 0 0 15px;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 15px;
-      overflow: hidden;
     }
     .inside-left img {
       max-width: 100%;
@@ -69,11 +82,7 @@
 
     /* Página derecha (mensaje) */
     .inside-right {
-      width: 50%;
-      height: 100%;
       background: white;
-      border-radius: 0 15px 15px 0;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -81,16 +90,16 @@
       text-align: center;
       font-size: 1.3em;
       color: #333;
-      opacity: 0;
-      transition: opacity 1s ease;
       line-height: 1.5em;
     }
 
-    /* Estado abierto */
+    /* Al abrir */
     .open .cover {
       transform: rotateY(-180deg);
+      width: 50%;
+      border-radius: 0 15px 15px 0;
     }
-    .open .inside-right {
+    .open .inside {
       opacity: 1;
       transition-delay: 1.2s;
     }
@@ -145,14 +154,11 @@
       position: absolute;
       bottom: 0;
       width: 400px;
-      z-index: 1; /* detrás de globos/confeti */
+      z-index: 1;
+      opacity: 0.25;
     }
-    .ironman {
-      left: 0;
-    }
-    .tony {
-      right: 0;
-    }
+    .ironman { left: 0; }
+    .tony { right: 0; }
 
     /* Responsive */
     @media (max-width: 700px) {
@@ -175,13 +181,15 @@
   <!-- Carta -->
   <div class="card" id="birthdayCard">
     <div class="cover">🎂 ¡Feliz Cumple! 🎂</div>
-    <div class="inside-left">
-      <img src="img/MiMujer.jpeg" alt="Foto de mi novia">
-    </div>
-    <div class="inside-right">
-      <p>✨ Feliz cumpleaños mi amor ❤️ ✨<br><br>
-      Que este día esté lleno de alegría, amor y momentos inolvidables.<br>
-      Gracias por ser la mejor parte de mi vida 💕</p>
+    <div class="inside">
+      <div class="inside-left">
+        <img src="img/MiMujer.jpeg" alt="Foto de mi novia">
+      </div>
+      <div class="inside-right">
+        <p>✨ Feliz cumpleaños mi amor ❤️ ✨<br><br>
+        Que este día esté lleno de alegría, amor y momentos inolvidables.<br>
+        Gracias por ser la mejor parte de mi vida 💕</p>
+      </div>
     </div>
   </div>
 
@@ -196,7 +204,7 @@
 
     // Confeti
     function launchConfetti() {
-      for (let i = 0; i < 150; i++) { // más confeti
+      for (let i = 0; i < 150; i++) {
         const confetti = document.createElement("div");
         confetti.classList.add("confetti");
         confetti.style.left = Math.random() * window.innerWidth + "px";
@@ -209,7 +217,7 @@
 
     // Globos
     function releaseBalloons() {
-      for (let i = 0; i < 20; i++) { // más globos
+      for (let i = 0; i < 20; i++) {
         const balloon = document.createElement("div");
         balloon.classList.add("balloon");
         balloon.style.left = Math.random() * window.innerWidth + "px";

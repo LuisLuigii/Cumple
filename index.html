@@ -98,8 +98,7 @@ body {
 .cover {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #ff6bbd, #9b5de5);
- /* color sólido */
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* gradiente bonito */
   color: white;
   display: flex;
   justify-content: center;
@@ -142,7 +141,6 @@ body {
 /* Confeti */
 .confetti {
   position: absolute;
-  top: -10px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -175,15 +173,9 @@ body {
   transform: translateX(-50%);
 }
 @keyframes rise {
-  0% {
-    transform: translateX(0) translateY(0);
-    opacity: 0;
-  }
+  0% { transform: translateX(0) translateY(0); opacity: 0; }
   10% { opacity: 1; }
-  100% {
-    transform: translateX(var(--offsetX)) translateY(-800px);
-    opacity: 0;
-  }
+  100% { transform: translateX(var(--offsetX)) translateY(-800px); opacity: 0; }
 }
 
 /* Imágenes de fondo */
@@ -202,6 +194,9 @@ body {
 <!-- Personajes -->
 <img src="img/IronMan1.png" class="background-img ironman">
 <img src="img/IronMan2.png" class="background-img tony">
+
+<!-- Canvas fuegos artificiales cielo -->
+<canvas id="skyFireworks" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
 
 <!-- Carta -->
 <div class="card" id="birthdayCard">
@@ -229,16 +224,17 @@ card.addEventListener("click", () => {
   launchConfetti();
 });
 
-// Confeti
+// Confeti más abundante
 function launchConfetti() {
-  for (let i = 0; i < 150; i++) {
+  for (let i = 0; i < 300; i++) { 
     const confetti = document.createElement("div");
     confetti.classList.add("confetti");
+    confetti.style.top = Math.random() * window.innerHeight * 0.5 + "px";
     confetti.style.left = Math.random() * window.innerWidth + "px";
     confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
-    confetti.style.animationDuration = 2 + Math.random()*3 + "s";
+    confetti.style.animationDuration = 2 + Math.random() * 3 + "s";
     document.body.appendChild(confetti);
-    setTimeout(() => confetti.remove(), 4000);
+    setTimeout(() => confetti.remove(), 5000);
   }
 }
 
@@ -258,14 +254,14 @@ function createStars() {
 }
 createStars();
 
-// Globos desde los lados de la página, movimiento diagonal
+// Globos desde los lados de la página
 function spawnPageSideBalloons() {
   setInterval(() => {
     const balloon = document.createElement('div');
     balloon.classList.add('balloon');
 
     const side = Math.random() < 0.5 ? 'left' : 'right';
-    const offsetX = (Math.random() * 200 + 50); // desplazamiento horizontal
+    const offsetX = (Math.random() * 200 + 50); 
     if(side === 'left') {
       balloon.style.left = '-50px';
       balloon.style.setProperty('--offsetX', `${offsetX}px`);
@@ -320,6 +316,36 @@ function animate(){
   requestAnimationFrame(animate);
 }
 animate();
+
+// Fuegos artificiales cielo
+const skyCanvas = document.getElementById('skyFireworks');
+const skyCtx = skyCanvas.getContext('2d');
+skyCanvas.width = window.innerWidth;
+skyCanvas.height = window.innerHeight;
+
+let skyFireworks = [];
+let skyParticles = [];
+
+class SkyFirework {
+  constructor(x,y,targetY){
+    this.x = x; this.y = y; this.targetY = targetY; this.speed = 3+Math.random()*2; this.exploded=false;
+  }
+  update() {
+    if(this.y>this.targetY) this.y-=this.speed;
+    else if(!this.exploded){ this.explode(); this.exploded=true; }
+  }
+  explode(){ for(let i=0;i<30;i++) skyParticles.push(new Particle(this.x,this.y)); }
+  draw(){ skyCtx.fillStyle='white'; skyCtx.fillRect(this.x,this.y,2,10); }
+}
+
+function animateSky(){
+  skyCtx.clearRect(0,0,skyCanvas.width, skyCanvas.height);
+  if(Math.random()<0.02) skyFireworks.push(new SkyFirework(Math.random()*skyCanvas.width, skyCanvas.height, Math.random()*skyCanvas.height/2));
+  skyFireworks.forEach((fw,i)=>{ fw.update(); fw.draw(); if(fw.exploded) skyFireworks.splice(i,1); });
+  skyParticles.forEach((p,i)=>{ p.update(); p.draw(); if(p.alpha<=0) skyParticles.splice(i,1); });
+  requestAnimationFrame(animateSky);
+}
+animateSky();
 </script>
 </body>
 </html>

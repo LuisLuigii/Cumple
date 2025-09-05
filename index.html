@@ -260,6 +260,36 @@ function createSideBalloons() {
   }
 }
 
+function spawnSideBalloons() {
+  const card = document.getElementById('birthdayCard');
+  const rect = card.getBoundingClientRect();
+
+  setInterval(() => {
+    const balloon = document.createElement('div');
+    balloon.classList.add('balloon');
+
+    const side = Math.random() < 0.5 ? 'left' : 'right';
+    if(side === 'left') {
+      balloon.style.left = (rect.left - 30 + Math.random()*30) + 'px';
+    } else {
+      balloon.style.left = (rect.right - 10 + Math.random()*30) + 'px';
+    }
+
+    balloon.style.bottom = '-60px';
+    balloon.style.backgroundColor = `hsl(${Math.random()*360},70%,60%)`;
+    balloon.style.width = 30 + Math.random()*20 + 'px';
+    balloon.style.height = 40 + Math.random()*30 + 'px';
+    balloon.style.animationDuration = (5 + Math.random()*5) + 's';
+
+    document.body.appendChild(balloon);
+
+    // Borrar después de que termine la animación
+    balloon.addEventListener('animationend', () => balloon.remove());
+  }, 300); // cada 0.3 segundos aparece un globo
+}
+
+spawnSideBalloons();
+
 
 
 // Estrellas fondo

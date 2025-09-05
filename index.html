@@ -99,7 +99,6 @@ body {
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg, #ff6bbd, #9b5de5);
- /* gradiente bonito */
   color: white;
   display: flex;
   justify-content: center;
@@ -299,14 +298,26 @@ class Firework {
     if(this.y>this.targetY) this.y-=this.speed;
     else if(!this.exploded){ this.explode(); this.exploded=true; }
   }
-  explode(){ for(let i=0;i<30;i++) particles.push(new Particle(this.x,this.y)); }
+  explode(){ for(let i=0;i<30;i++) particles.push(new Particle(this.x,this.y, ctx)); }
   draw(){ ctx.fillStyle='white'; ctx.fillRect(this.x,this.y,2,10); }
 }
 
 class Particle {
-  constructor(x,y){ this.x=x; this.y=y; this.speedX=(Math.random()-0.5)*5; this.speedY=(Math.random()-0.5)*5; this.alpha=1; this.color=`hsl(${Math.random()*360},100%,50%)`; }
+  constructor(x,y, context){
+    this.x=x; this.y=y;
+    this.speedX=(Math.random()-0.5)*5;
+    this.speedY=(Math.random()-0.5)*5;
+    this.alpha=1;
+    this.color=`hsl(${Math.random()*360},100%,50%)`;
+    this.context = context;
+  }
   update(){ this.x+=this.speedX; this.y+=this.speedY; this.alpha-=0.02; }
-  draw(){ ctx.fillStyle=this.color; ctx.globalAlpha=this.alpha; ctx.fillRect(this.x,this.y,3,3); ctx.globalAlpha=1; }
+  draw(){
+    this.context.fillStyle=this.color;
+    this.context.globalAlpha=this.alpha;
+    this.context.fillRect(this.x,this.y,3,3);
+    this.context.globalAlpha=1;
+  }
 }
 
 function animate(){
@@ -335,11 +346,10 @@ class SkyFirework {
     if(this.y>this.targetY) this.y-=this.speed;
     else if(!this.exploded){ this.explode(); this.exploded=true; }
   }
-  explode(){ for(let i=0;i<30;i++) skyParticles.push(new Particle(this.x,this.y)); }
+  explode(){ for(let i=0;i<30;i++) skyParticles.push(new Particle(this.x,this.y, skyCtx)); }
   draw(){ skyCtx.fillStyle='white'; skyCtx.fillRect(this.x,this.y,2,10); }
 }
 
-// CORREGIDO: animación de fuegos artificiales del cielo
 function animateSky(){
   skyCtx.clearRect(0,0,skyCanvas.width, skyCanvas.height);
 
@@ -350,7 +360,6 @@ function animateSky(){
     if (!fw.exploded) {
       fw.draw();
     } else {
-      // Elimínalo solo después de explotar
       skyFireworks.splice(i, 1);
     }
   }

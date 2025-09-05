@@ -7,19 +7,110 @@
 body {
   margin: 0;
   height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  background: #0d1b2a; /* cielo estrellado */
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Poppins', sans-serif;
-  overflow: hidden;
-  position: relative;
-  background: #0d1b2a;
 }
 
-/* Portada: fondo fuegos artificiales */
+/* Estrellas fondo */
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: twinkle 3s infinite alternate, moveStars 60s linear infinite;
+}
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+  100% { opacity: 0.4; transform: scale(1); }
+}
+@keyframes moveStars {
+  from { transform: translateY(0); }
+  to { transform: translateY(100vh); }
+}
+
+/* Carta estilo folleto */
+.card {
+  width: 600px;
+  height: 500px;
+  perspective: 2000px;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Páginas internas */
+.inside {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 1s ease, transform 1s ease;
+  position: relative;
+  z-index: 3;
+}
+
+/* Fondo globos páginas internas */
+.inside-left, .inside-right {
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+}
+.inside-left::before, .inside-right::before {
+  content:'';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0; left:0;
+  z-index: 0;
+}
+
+/* Página izquierda */
+.inside-left {
+  width: 50%;
+  height: 100%;
+  background: #ffc0cb; /* rosa */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+.inside-left img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  z-index: 2;
+}
+
+/* Página derecha */
+.inside-right {
+  width: 50%;
+  height: 100%;
+  background: #ffc0cb; /* rosa */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  text-align: center;
+  font-size: 1.3em;
+  color: #333;
+  line-height: 1.5em;
+  z-index: 2;
+}
+
+/* Portada */
 .cover {
   width: 100%;
   height: 100%;
+  background: linear-gradient(135deg,#ff6b6b,#feca57); /* color sólido para distinguir */
   color: white;
   display: flex;
   justify-content: center;
@@ -39,7 +130,7 @@ body {
   overflow: hidden;
 }
 
-/* Canvas fuegos artificiales en portada */
+/* Canvas fuegos artificiales portada */
 #fireworks {
   position: absolute;
   width: 100%;
@@ -49,68 +140,7 @@ body {
   z-index: 1;
 }
 
-/* Contenedor de páginas internas */
-.inside {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  border-radius: 15px;
-  overflow: hidden;
-  opacity: 0;
-  transform: scale(0.9);
-  transition: opacity 1s ease, transform 1s ease;
-  z-index: 3;
-  position: relative;
-}
-
-/* Fondo globos en páginas internas */
-.inside::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  z-index: 0;
-}
-
-/* Página izquierda */
-.inside-left {
-  width: 50%;
-  height: 100%;
-  background: rgba(255,255,255,0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-  overflow: hidden;
-  position: relative;
-}
-.inside-left img {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 10px;
-  object-fit: cover;
-  z-index: 2;
-}
-
-/* Página derecha */
-.inside-right {
-  width: 50%;
-  height: 100%;
-  background: rgba(255,255,255,0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 25px;
-  text-align: center;
-  font-size: 1.3em;
-  color: #333;
-  line-height: 1.5em;
-  position: relative;
-  z-index: 2;
-}
-
-/* Estado abierto (folleto) */
+/* Estado abierto */
 .open .cover {
   transform: rotateY(-180deg);
 }
@@ -135,12 +165,12 @@ body {
   to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
 }
 
-/* Globos (animación) */
+/* Globos animados */
 .balloon {
   position: absolute;
   bottom: -150px;
-  width: 60px;
-  height: 80px;
+  width: 40px;
+  height: 60px;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   animation: rise 10s ease-in-out infinite;
   z-index: 1;
@@ -148,10 +178,10 @@ body {
 .balloon::after {
   content: '';
   position: absolute;
-  bottom: -20px;
+  bottom: -15px;
   left: 50%;
   width: 2px;
-  height: 25px;
+  height: 15px;
   background: #555;
   transform: translateX(-50%);
 }
@@ -162,24 +192,31 @@ body {
 }
 
 /* Imágenes de fondo */
-.background-img { position: absolute; bottom: 0; width: 400px; z-index: 1; }
+.background-img { position: absolute; bottom: 0; width: 300px; z-index: 1; }
 .ironman { left: 0; }
 .tony { right: 0; }
 
+@media (max-width: 700px) {
+  .card { width: 90vw; height: 70vh; }
+  .inside-right { font-size: 1.1em; }
+}
 </style>
 </head>
 <body>
 
-<!-- Canvas fuegos artificiales portada -->
-<canvas id="fireworks"></canvas>
+<!-- Canvas fondo estrellado -->
+<div id="stars"></div>
 
 <!-- Personajes -->
-<img src="img/IronMan1.png" alt="Ironman" class="background-img ironman">
-<img src="img/IronMan2.png" alt="Tony Stark" class="background-img tony">
+<img src="img/IronMan1.png" class="background-img ironman">
+<img src="img/IronMan2.png" class="background-img tony">
 
 <!-- Carta -->
 <div class="card" id="birthdayCard">
-  <div class="cover">🎂 ¡Feliz Cumple! 🎂</div>
+  <div class="cover">
+    🎂 ¡Feliz Cumple! 🎂
+    <canvas id="fireworks"></canvas>
+  </div>
   <div class="inside">
     <div class="inside-left">
       <img src="img/MiMujer.jpeg" alt="Foto de mi novia">
@@ -214,7 +251,7 @@ function launchConfetti() {
   }
 }
 
-// Globos dentro de las páginas
+// Globos páginas internas
 function createPageBalloons() {
   const inside = document.querySelector('.inside');
   for (let i = 0; i < 15; i++) {
@@ -228,11 +265,28 @@ function createPageBalloons() {
   }
 }
 
+// Estrellas fondo
+function createStars() {
+  const starsContainer = document.getElementById("stars");
+  for (let i = 0; i < 120; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    const size = Math.random()*3 + "px";
+    star.style.width = size;
+    star.style.height = size;
+    star.style.top = Math.random()*window.innerHeight + "px";
+    star.style.left = Math.random()*window.innerWidth + "px";
+    star.style.animationDuration = (2 + Math.random()*3) + "s, 60s";
+    starsContainer.appendChild(star);
+  }
+}
+createStars();
+
 // Fuegos artificiales portada
 const canvas = document.getElementById('fireworks');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width = 600;
+canvas.height = 500;
 
 let fireworks = [];
 let particles = [];
@@ -246,63 +300,35 @@ class Firework {
     this.exploded = false;
   }
   update() {
-    if(this.y > this.targetY){
-      this.y -= this.speed;
-    } else if(!this.exploded){
-      this.explode();
-      this.exploded = true;
-    }
+    if(this.y > this.targetY) this.y -= this.speed;
+    else if(!this.exploded) { this.explode(); this.exploded=true; }
   }
   explode(){
-    for(let i=0;i<50;i++){
-      particles.push(new Particle(this.x,this.y));
-    }
+    for(let i=0;i<30;i++) particles.push(new Particle(this.x,this.y));
   }
-  draw(){
-    ctx.fillStyle = 'white';
-    ctx.fillRect(this.x,this.y,2,10);
-  }
+  draw(){ ctx.fillStyle='white'; ctx.fillRect(this.x,this.y,2,10); }
 }
 
 class Particle {
   constructor(x,y){
-    this.x=x;
-    this.y=y;
-    this.speedX = (Math.random()-0.5)*5;
-    this.speedY = (Math.random()-0.5)*5;
-    this.alpha = 1;
-    this.color = `hsl(${Math.random()*360},100%,50%)`;
+    this.x=x; this.y=y;
+    this.speedX=(Math.random()-0.5)*5;
+    this.speedY=(Math.random()-0.5)*5;
+    this.alpha=1;
+    this.color=`hsl(${Math.random()*360},100%,50%)`;
   }
-  update(){
-    this.x += this.speedX;
-    this.y += this.speedY;
-    this.alpha -=0.02;
-  }
-  draw(){
-    ctx.fillStyle = this.color;
-    ctx.globalAlpha = this.alpha;
-    ctx.fillRect(this.x,this.y,3,3);
-    ctx.globalAlpha = 1;
-  }
+  update(){ this.x+=this.speedX; this.y+=this.speedY; this.alpha-=0.02; }
+  draw(){ ctx.fillStyle=this.color; ctx.globalAlpha=this.alpha; ctx.fillRect(this.x,this.y,3,3); ctx.globalAlpha=1; }
 }
 
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   if(Math.random()<0.03) fireworks.push(new Firework(Math.random()*canvas.width,canvas.height, Math.random()*canvas.height/2));
-  fireworks.forEach((fw,i)=>{
-    fw.update();
-    fw.draw();
-    if(fw.exploded) fireworks.splice(i,1);
-  });
-  particles.forEach((p,i)=>{
-    p.update();
-    p.draw();
-    if(p.alpha<=0) particles.splice(i,1);
-  });
+  fireworks.forEach((fw,i)=>{ fw.update(); fw.draw(); if(fw.exploded) fireworks.splice(i,1); });
+  particles.forEach((p,i)=>{ p.update(); p.draw(); if(p.alpha<=0) particles.splice(i,1); });
   requestAnimationFrame(animate);
 }
 animate();
 </script>
-
 </body>
 </html>

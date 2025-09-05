@@ -9,7 +9,7 @@ body {
   height: 100vh;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
-  background: #0d1b2a; /* cielo estrellado */
+  background: #0d1b2a;
   position: relative;
   display: flex;
   justify-content: center;
@@ -57,21 +57,6 @@ body {
   z-index: 3;
 }
 
-/* Fondo globos páginas internas */
-.inside-left, .inside-right {
-  position: relative;
-  overflow: hidden;
-  z-index: 2;
-}
-.inside-left::before, .inside-right::before {
-  content:'';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0; left:0;
-  z-index: 0;
-}
-
 /* Página izquierda */
 .inside-left {
   width: 50%;
@@ -81,6 +66,8 @@ body {
   justify-content: center;
   align-items: center;
   padding: 15px;
+  overflow: hidden;
+  position: relative;
 }
 .inside-left img {
   max-width: 100%;
@@ -103,6 +90,7 @@ body {
   font-size: 1.3em;
   color: #333;
   line-height: 1.5em;
+  position: relative;
   z-index: 2;
 }
 
@@ -110,7 +98,7 @@ body {
 .cover {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg,#ff6b6b,#feca57); /* color sólido para distinguir */
+  background: linear-gradient(135deg,#ff6b6b,#feca57); /* color sólido */
   color: white;
   display: flex;
   justify-content: center;
@@ -168,11 +156,11 @@ body {
 /* Globos animados */
 .balloon {
   position: absolute;
-  bottom: -150px;
+  bottom: -100px;
   width: 40px;
   height: 60px;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  animation: rise 10s ease-in-out infinite;
+  animation: rise linear infinite;
   z-index: 1;
 }
 .balloon::after {
@@ -186,9 +174,9 @@ body {
   transform: translateX(-50%);
 }
 @keyframes rise {
-  0% { transform: translateY(110%); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: translateY(-120%); opacity: 0; }
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(-700px); opacity: 0; }
 }
 
 /* Imágenes de fondo */
@@ -203,9 +191,6 @@ body {
 </style>
 </head>
 <body>
-
-<!-- Canvas fondo estrellado -->
-<div id="stars"></div>
 
 <!-- Personajes -->
 <img src="img/IronMan1.png" class="background-img ironman">
@@ -251,23 +236,21 @@ function launchConfetti() {
   }
 }
 
-// Globos páginas internas
+// Globos páginas internas (constantes)
 function createPageBalloons() {
   const inside = document.querySelector('.inside');
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 20; i++) {
     const balloon = document.createElement('div');
     balloon.classList.add('balloon');
-    balloon.style.left = Math.random() * inside.offsetWidth + 'px';
+    balloon.style.left = (inside.offsetLeft + Math.random() * inside.offsetWidth) + 'px';
     balloon.style.backgroundColor = `hsl(${Math.random()*360},70%,60%)`;
-    balloon.style.animationDuration = 6 + Math.random()*4 + 's';
-    inside.appendChild(balloon);
-    setTimeout(()=> balloon.remove(), 12000);
+    balloon.style.animationDuration = (6 + Math.random()*6) + 's';
+    document.body.appendChild(balloon);
   }
 }
 
 // Estrellas fondo
 function createStars() {
-  const starsContainer = document.getElementById("stars");
   for (let i = 0; i < 120; i++) {
     const star = document.createElement("div");
     star.classList.add("star");
@@ -277,7 +260,7 @@ function createStars() {
     star.style.top = Math.random()*window.innerHeight + "px";
     star.style.left = Math.random()*window.innerWidth + "px";
     star.style.animationDuration = (2 + Math.random()*3) + "s, 60s";
-    starsContainer.appendChild(star);
+    document.body.appendChild(star);
   }
 }
 createStars();

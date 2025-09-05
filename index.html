@@ -180,44 +180,57 @@ body {
 }
 /* SOLO PARA CELULAR */
 @media (max-width: 700px) {
-  body {
-    overflow: hidden;
+  html, body {
     height: 100vh;
+    overflow: hidden;
+  }
+  body {
+    min-height: 100vh;
+    min-width: 100vw;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .card {
-    width: 88vw;
-    height: 54vw;
-    min-width: 180px;
-    min-height: 120px;
-    max-width: 92vw;
-    max-height: 60vw;
-    margin: 0 2vw;
+    width: 78vw;
+    height: 46vw;
+    min-width: 140px;
+    min-height: 90px;
+    max-width: 86vw;
+    max-height: 50vw;
+    margin: 0;
+    position: relative;
+    top: 0;
+    left: 0;
   }
   .cover-content {
-    max-width: 180px;
+    max-width: 140px;
     padding: 0;
   }
   .cover-cake {
-    width: 50px !important;
-    height: 38px !important;
-    margin-bottom: 4px;
+    width: 38px !important;
+    height: 28px !important;
+    margin-bottom: 2px;
   }
   .cover-balloons svg {
-    width: 18px !important;
-    height: 36px !important;
+    width: 13px !important;
+    height: 24px !important;
   }
   .cover-happy {
-    font-size: 1.1em;
+    font-size: 0.9em;
   }
   .cover-birthday {
-    font-size: 1em;
+    font-size: 0.8em;
   }
   .cover-top-text {
-    font-size: 0.8em;
-    margin-bottom: 4px;
+    font-size: 0.7em;
+    margin-bottom: 2px;
   }
   .cover-main-text {
-    margin-top: 4px;
+    margin-top: 2px;
   }
   .inside {
     flex-direction: row;
@@ -225,24 +238,33 @@ body {
   .inside-left, .inside-right {
     width: 50%;
     height: 100%;
-    padding: 2px;
+    padding: 1px;
   }
   .inside-left img {
-    max-width: 96%;
-    max-height: 96%;
-    border-radius: 7px;
+    max-width: 94%;
+    max-height: 94%;
+    border-radius: 5px;
   }
   .inside-right {
-    font-size: 0.75em;
-    padding: 2px;
+    font-size: 0.62em;
+    padding: 1px;
   }
   .inside-right p {
-    font-size: 0.74em;
-    line-height: 1.2em;
+    font-size: 0.61em;
+    line-height: 1.1em;
   }
   .ironman, .tony {
-    width: 32px;
-    max-width: 10vw;
+    width: 48px;
+    max-width: 16vw;
+    position: fixed;
+    bottom: 2vw;
+    z-index: 10;
+  }
+  .ironman {
+    left: 2vw;
+  }
+  .tony {
+    right: 2vw;
   }
 }
 /* Estrellas fondo */

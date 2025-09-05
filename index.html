@@ -156,11 +156,11 @@ body {
 /* Globos animados */
 .balloon {
   position: absolute;
-  bottom: -100px;
-  width: 40px;
-  height: 60px;
+  bottom: -60px;
+  width: 30px;
+  height: 40px;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  animation: rise linear infinite;
+  animation: rise linear forwards;
   z-index: 1;
 }
 .balloon::after {
@@ -174,9 +174,15 @@ body {
   transform: translateX(-50%);
 }
 @keyframes rise {
-  0% { transform: translateY(0); opacity: 0; }
+  0% {
+    transform: translateX(0) translateY(0);
+    opacity: 0;
+  }
   10% { opacity: 1; }
-  100% { transform: translateY(-700px); opacity: 0; }
+  100% {
+    transform: translateX(var(--offsetX)) translateY(-800px);
+    opacity: 0;
+  }
 }
 
 /* Imágenes de fondo */
@@ -220,7 +226,6 @@ const card = document.getElementById("birthdayCard");
 card.addEventListener("click", () => {
   card.classList.add("open");
   launchConfetti();
-  createPageBalloons();
 });
 
 // Confeti
@@ -235,62 +240,6 @@ function launchConfetti() {
     setTimeout(() => confetti.remove(), 4000);
   }
 }
-
-// Globos que salen de los lados de la carta
-function createSideBalloons() {
-  const card = document.getElementById('birthdayCard');
-  const rect = card.getBoundingClientRect();
-
-  for (let i = 0; i < 30; i++) {
-    const balloon = document.createElement('div');
-    balloon.classList.add('balloon');
-
-    // Salida por izquierda o derecha
-    const side = Math.random() < 0.5 ? 'left' : 'right';
-    if(side === 'left') {
-      balloon.style.left = (rect.left - 50 + Math.random() * 50) + 'px'; // a la izquierda de la carta
-    } else {
-      balloon.style.left = (rect.right - 10 + Math.random() * 50) + 'px'; // a la derecha de la carta
-    }
-
-    balloon.style.backgroundColor = `hsl(${Math.random()*360},70%,60%)`;
-    balloon.style.animationDuration = (6 + Math.random()*6) + 's';
-
-    document.body.appendChild(balloon);
-  }
-}
-
-function spawnSideBalloons() {
-  const card = document.getElementById('birthdayCard');
-  const rect = card.getBoundingClientRect();
-
-  setInterval(() => {
-    const balloon = document.createElement('div');
-    balloon.classList.add('balloon');
-
-    const side = Math.random() < 0.5 ? 'left' : 'right';
-    if(side === 'left') {
-      balloon.style.left = (rect.left - 30 + Math.random()*30) + 'px';
-    } else {
-      balloon.style.left = (rect.right - 10 + Math.random()*30) + 'px';
-    }
-
-    balloon.style.bottom = '-60px';
-    balloon.style.backgroundColor = `hsl(${Math.random()*360},70%,60%)`;
-    balloon.style.width = 30 + Math.random()*20 + 'px';
-    balloon.style.height = 40 + Math.random()*30 + 'px';
-    balloon.style.animationDuration = (5 + Math.random()*5) + 's';
-
-    document.body.appendChild(balloon);
-
-    // Borrar después de que termine la animación
-    balloon.addEventListener('animationend', () => balloon.remove());
-  }, 300); // cada 0.3 segundos aparece un globo
-}
-
-spawnSideBalloons();
-
-
 
 // Estrellas fondo
 function createStars() {
@@ -308,6 +257,33 @@ function createStars() {
 }
 createStars();
 
+// Globos desde los lados de la página, movimiento diagonal
+function spawnPageSideBalloons() {
+  setInterval(() => {
+    const balloon = document.createElement('div');
+    balloon.classList.add('balloon');
+
+    const side = Math.random() < 0.5 ? 'left' : 'right';
+    const offsetX = (Math.random() * 200 + 50); // desplazamiento horizontal
+    if(side === 'left') {
+      balloon.style.left = '-50px';
+      balloon.style.setProperty('--offsetX', `${offsetX}px`);
+    } else {
+      balloon.style.right = '-50px';
+      balloon.style.setProperty('--offsetX', `${-offsetX}px`);
+    }
+
+    balloon.style.backgroundColor = `hsl(${Math.random()*360},70%,60%)`;
+    balloon.style.width = 30 + Math.random()*20 + 'px';
+    balloon.style.height = 40 + Math.random()*30 + 'px';
+    balloon.style.animationDuration = (5 + Math.random()*5) + 's';
+
+    document.body.appendChild(balloon);
+    balloon.addEventListener('animationend', () => balloon.remove());
+  }, 300);
+}
+spawnPageSideBalloons();
+
 // Fuegos artificiales portada
 const canvas = document.getElementById('fireworks');
 const ctx = canvas.getContext('2d');
@@ -319,30 +295,18 @@ let particles = [];
 
 class Firework {
   constructor(x,y,targetY){
-    this.x = x;
-    this.y = y;
-    this.targetY = targetY;
-    this.speed = 3 + Math.random()*2;
-    this.exploded = false;
+    this.x = x; this.y = y; this.targetY = targetY; this.speed = 3+Math.random()*2; this.exploded=false;
   }
   update() {
-    if(this.y > this.targetY) this.y -= this.speed;
-    else if(!this.exploded) { this.explode(); this.exploded=true; }
+    if(this.y>this.targetY) this.y-=this.speed;
+    else if(!this.exploded){ this.explode(); this.exploded=true; }
   }
-  explode(){
-    for(let i=0;i<30;i++) particles.push(new Particle(this.x,this.y));
-  }
+  explode(){ for(let i=0;i<30;i++) particles.push(new Particle(this.x,this.y)); }
   draw(){ ctx.fillStyle='white'; ctx.fillRect(this.x,this.y,2,10); }
 }
 
 class Particle {
-  constructor(x,y){
-    this.x=x; this.y=y;
-    this.speedX=(Math.random()-0.5)*5;
-    this.speedY=(Math.random()-0.5)*5;
-    this.alpha=1;
-    this.color=`hsl(${Math.random()*360},100%,50%)`;
-  }
+  constructor(x,y){ this.x=x; this.y=y; this.speedX=(Math.random()-0.5)*5; this.speedY=(Math.random()-0.5)*5; this.alpha=1; this.color=`hsl(${Math.random()*360},100%,50%)`; }
   update(){ this.x+=this.speedX; this.y+=this.speedY; this.alpha-=0.02; }
   draw(){ ctx.fillStyle=this.color; ctx.globalAlpha=this.alpha; ctx.fillRect(this.x,this.y,3,3); ctx.globalAlpha=1; }
 }

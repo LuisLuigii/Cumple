@@ -10,47 +10,30 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #fef9f4;
+      background: radial-gradient(circle at bottom, #0d1b2a, #000);
       font-family: 'Poppins', sans-serif;
       overflow: hidden;
       position: relative;
     }
 
-    /* Fondo de velitas */
-    .candles {
+    /* Estrellas */
+    .star {
       position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 200px;
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-end;
-      z-index: 0;
-      pointer-events: none;
-    }
-    .candle {
-      width: 20px;
-      height: 80px;
-      background: linear-gradient(to top, #ffb347, #ffcc33);
-      border-radius: 5px;
-      position: relative;
-    }
-    .flame {
-      position: absolute;
-      top: -25px;
-      left: 50%;
-      width: 20px;
-      height: 30px;
-      background: radial-gradient(circle, #ffec85 20%, #ffae34 60%, rgba(255, 87, 34, 0.8) 100%);
-      border-radius: 50% 50% 50% 50%;
-      transform: translateX(-50%);
-      animation: flicker 1s infinite alternate;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle 3s infinite alternate, moveStars 60s linear infinite;
     }
 
-    @keyframes flicker {
-      0% { transform: translateX(-50%) scale(1); opacity: 1; }
-      50% { transform: translateX(-50%) scale(1.2); opacity: 0.8; }
-      100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+      100% { opacity: 0.4; transform: scale(1); }
+    }
+
+    @keyframes moveStars {
+      from { transform: translateY(0); }
+      to { transform: translateY(100vh); }
     }
 
     /* Carta */
@@ -64,7 +47,6 @@
       z-index: 5;
     }
 
-    /* Portada */
     .cover {
       width: 50%;
       height: 100%;
@@ -86,7 +68,6 @@
       padding: 20px;
     }
 
-    /* Página izquierda (foto) */
     .inside-left {
       width: 50%;
       height: 100%;
@@ -105,7 +86,6 @@
       object-fit: cover;
     }
 
-    /* Página derecha (mensaje) */
     .inside-right {
       width: 50%;
       height: 100%;
@@ -124,7 +104,6 @@
       line-height: 1.5em;
     }
 
-    /* Estado abierto */
     .open .cover {
       transform: rotateY(-180deg);
     }
@@ -178,12 +157,12 @@
       }
     }
 
-    /* Imágenes de fondo (Ironman y Tony Stark) */
+    /* Imágenes de fondo */
     .background-img {
       position: absolute;
       bottom: 0;
       width: 400px;
-      z-index: 1; /* detrás de globos/confeti */
+      z-index: 1;
     }
     .ironman {
       left: 0;
@@ -191,29 +170,12 @@
     .tony {
       right: 0;
     }
-
-    /* Responsive */
-    @media (max-width: 700px) {
-      .card {
-        width: 95vw;
-        height: 70vh;
-      }
-      .inside-right {
-        font-size: 1.1em;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <!-- Fondo decorativo con velitas -->
-  <div class="candles">
-    <div class="candle"><div class="flame"></div></div>
-    <div class="candle"><div class="flame"></div></div>
-    <div class="candle"><div class="flame"></div></div>
-    <div class="candle"><div class="flame"></div></div>
-    <div class="candle"><div class="flame"></div></div>
-  </div>
+  <!-- Fondo con estrellas -->
+  <div id="stars"></div>
 
   <!-- Fondo decorativo personajes -->
   <img src="img/IronMan1.png" alt="Ironman" class="background-img ironman">
@@ -266,6 +228,23 @@
         setTimeout(() => balloon.remove(), 7000);
       }
     }
+
+    // Estrellas
+    function createStars() {
+      const starsContainer = document.getElementById("stars");
+      for (let i = 0; i < 120; i++) {
+        const star = document.createElement("div");
+        star.classList.add("star");
+        const size = Math.random() * 3 + "px";
+        star.style.width = size;
+        star.style.height = size;
+        star.style.top = Math.random() * window.innerHeight + "px";
+        star.style.left = Math.random() * window.innerWidth + "px";
+        star.style.animationDuration = (2 + Math.random() * 3) + "s, 60s";
+        starsContainer.appendChild(star);
+      }
+    }
+    createStars();
   </script>
 
 </body>

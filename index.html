@@ -1,1 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Carta de Cumpleaños</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fef9f4;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    /* Contenedor de la carta */
+    .card {
+      width: 320px;
+      height: 520px;
+      perspective: 2000px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* Portada */
+    .cover {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #ff6b6b, #feca57);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8em;
+      font-weight: bold;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: absolute;
+      backface-visibility: hidden;
+      transform-origin: left;
+      transition: transform 1.5s ease-in-out;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Interior de la carta */
+    .inside {
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+      text-align: center;
+      font-size: 1.3em;
+      color: #333;
+      opacity: 0;
+      transition: opacity 1s ease;
+      line-height: 1.5em;
+    }
+
+    /* Cuando se abre */
+    .open .cover {
+      transform: rotateY(-180deg);
+    }
+    .open .inside {
+      opacity: 1;
+      transition-delay: 1.2s;
+    }
+
+    /* Confeti */
+    .confetti {
+      position: absolute;
+      top: -10px;
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      opacity: 0.7;
+      border-radius: 50%;
+      animation: fall 3s linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    /* Globos */
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      width: 60px;
+      height: 80px;
+      background: red;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: rise 6s ease-in-out forwards;
+    }
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      width: 2px;
+      height: 25px;
+      background: #555;
+      transform: translateX(-50%);
+    }
+    @keyframes rise {
+      to {
+        transform: translateY(-110vh);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive para móviles */
+    @media (max-width: 600px) {
+      .card {
+        width: 90vw;
+        height: 70vh;
+      }
+      .cover {
+        font-size: 2em;
+        padding: 30px;
+      }
+      .inside {
+        font-size: 1.5em;
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="birthdayCard">
+    <div class="cover">🎂 ¡Feliz Cumple! 🎂</div>
+    <div class="inside">
+      <p>✨ Feliz cumpleaños mi amor ❤️ ✨<br><br>
+      Que este día esté lleno de alegría, amor y momentos inolvidables.<br>
+      Gracias por ser la mejor parte de mi vida 💕</p>
+    </div>
+  </div>
+
+  <script>
+    const card = document.getElementById("birthdayCard");
+
+    card.addEventListener("click", () => {
+      card.classList.add("open");
+      launchConfetti();
+      releaseBalloons();
+    });
+
+    // Confeti aleatorio
+    function launchConfetti() {
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = Math.random() * window.innerWidth + "px";
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = 2 + Math.random() * 3 + "s";
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 4000);
+      }
+    }
+
+    // Globos
+    function releaseBalloons() {
+      for (let i = 0; i < 5; i++) {
+        const balloon = document.createElement("div");
+        balloon.classList.add("balloon");
+        balloon.style.left = Math.random() * window.innerWidth + "px";
+        balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+        balloon.style.animationDuration = 5 + Math.random() * 3 + "s";
+        document.body.appendChild(balloon);
+        setTimeout(() => balloon.remove(), 7000);
+      }
+    }
+  </script>
+
+</body>
+</html>
 

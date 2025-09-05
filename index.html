@@ -338,11 +338,32 @@ class SkyFirework {
   draw(){ skyCtx.fillStyle='white'; skyCtx.fillRect(this.x,this.y,2,10); }
 }
 
+// CORREGIDO: animación de fuegos artificiales del cielo
 function animateSky(){
   skyCtx.clearRect(0,0,skyCanvas.width, skyCanvas.height);
-  if(Math.random()<0.02) skyFireworks.push(new SkyFirework(Math.random()*skyCanvas.width, skyCanvas.height, Math.random()*skyCanvas.height/2));
-  skyFireworks.forEach((fw,i)=>{ fw.update(); fw.draw(); if(fw.exploded) skyFireworks.splice(i,1); });
-  skyParticles.forEach((p,i)=>{ p.update(); p.draw(); if(p.alpha<=0) skyParticles.splice(i,1); });
+
+  // Actualiza y dibuja los fuegos artificiales
+  for (let i = skyFireworks.length - 1; i >= 0; i--) {
+    const fw = skyFireworks[i];
+    fw.update();
+    if (!fw.exploded) {
+      fw.draw();
+    } else {
+      // Elimínalo solo después de explotar
+      skyFireworks.splice(i, 1);
+    }
+  }
+
+  // Actualiza y dibuja las partículas
+  for (let i = skyParticles.length - 1; i >= 0; i--) {
+    const p = skyParticles[i];
+    p.update();
+    p.draw();
+    if (p.alpha <= 0) {
+      skyParticles.splice(i, 1);
+    }
+  }
+
   requestAnimationFrame(animateSky);
 }
 animateSky();

@@ -6,17 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 body {
-  min-height: 100vh;
-  min-width: 100vw;
+  margin: 0;
+  height: 100vh;
   font-family: 'Poppins', sans-serif;
-  background: #0d1b2a;
   overflow: hidden;
+  background: #0d1b2a;
   position: relative;
   display: flex;
   justify-content: center;
@@ -34,52 +29,43 @@ body {
 }
 .ironman {
   left: 0;
-  width: 90px;
-  max-width: 22vw;
+  width: 120px;
+  max-width: 28vw;
 }
 .tony {
   right: 0;
-  width: 90px;
-  max-width: 22vw;
+  width: 120px;
+  max-width: 28vw;
 }
+
 @media (max-width: 700px) {
   .ironman, .tony {
-    width: 48px;
+    width: 50px;
     max-width: 14vw;
   }
 }
 
 /* Carta */
 .card {
-  width: 420px;
-  height: 340px;
+  width: 600px;
+  height: 500px;
   perspective: 2000px;
   cursor: pointer;
   position: relative;
   z-index: 3;
   background: none;
-  margin: 0 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin-left: 0;
+  margin-right: 0;
+  transition: width 0.3s, height 0.3s;
 }
 @media (max-width: 700px) {
   .card {
-    width: 88vw;
-    height: 62vw;
-    min-width: 220px;
-    min-height: 180px;
-    max-width: 96vw;
-    max-height: 70vw;
-    margin: 0 18vw;
-  }
-}
-@media (max-width: 500px) {
-  .card {
     width: 96vw;
     height: 70vw;
-    margin: 0 10vw;
+    min-width: 0;
+    min-height: 0;
+    max-width: 99vw;
+    max-height: 80vh;
   }
 }
 
@@ -142,13 +128,13 @@ body {
 }
 
 .cover-happy {
-  font-size: 2em;
+  font-size: 2.2em;
   color: #222;
   font-weight: 700;
   letter-spacing: 2px;
 }
 .cover-birthday {
-  font-size: 1.3em;
+  font-size: 2em;
   color: #00c853;
   font-weight: 700;
   letter-spacing: 2px;
@@ -176,7 +162,6 @@ body {
 /* Páginas internas */
 .inside {
   display: flex;
-  flex-direction: row;
   width: 100%;
   height: 100%;
   border-radius: 15px;
@@ -186,7 +171,6 @@ body {
   transition: opacity 1s ease, transform 1s ease;
   position: relative;
   z-index: 3;
-  background: #ffc0cb;
 }
 
 .inside-left {
@@ -201,8 +185,8 @@ body {
   position: relative;
 }
 .inside-left img {
-  max-width: 98%;
-  max-height: 98%;
+  max-width: 100%;
+  max-height: 100%;
   border-radius: 10px;
   object-fit: cover;
   z-index: 2;
@@ -218,7 +202,7 @@ body {
   align-items: center;
   padding: 10px;
   text-align: center;
-  font-size: 1em;
+  font-size: 1.1em;
   color: #333;
   line-height: 1.4em;
   position: relative;
@@ -228,7 +212,7 @@ body {
 
 .inside-right p {
   margin: 0;
-  font-size: 0.98em;
+  font-size: 1em;
   line-height: 1.4em;
   word-break: break-word;
 }

@@ -36,40 +36,17 @@
       to { transform: translateY(100vh); }
     }
 
-    /* Carta */
+    /* Carta estilo folleto */
     .card {
       width: 600px;
       height: 500px;
       perspective: 2000px;
       cursor: pointer;
       position: relative;
-      display: flex;
       z-index: 5;
     }
 
-    /* Portada */
-    .cover {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #ff6b6b, #feca57);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.8em;
-      font-weight: bold;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      position: absolute;
-      right: 0;
-      backface-visibility: hidden;
-      transform-origin: left;
-      transition: transform 1.5s ease-in-out, width 1.5s ease-in-out;
-      text-align: center;
-      padding: 20px;
-    }
-
-    /* Contenedor interno oculto */
+    /* Contenedor de páginas internas */
     .inside {
       display: flex;
       width: 100%;
@@ -77,11 +54,12 @@
       border-radius: 15px;
       overflow: hidden;
       opacity: 0;
-      transition: opacity 1s ease;
+      transform: scale(0.9);
+      transition: opacity 1s ease, transform 1s ease;
       z-index: 3;
     }
 
-    /* Página izquierda (foto) */
+    /* Página izquierda */
     .inside-left {
       width: 50%;
       height: 100%;
@@ -99,7 +77,7 @@
       object-fit: cover;
     }
 
-    /* Página derecha (mensaje) */
+    /* Página derecha */
     .inside-right {
       width: 50%;
       height: 100%;
@@ -114,14 +92,37 @@
       line-height: 1.5em;
     }
 
-    /* Estado abierto */
+    /* Portada */
+    .cover {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #ff6b6b, #feca57);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8em;
+      font-weight: bold;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      position: absolute;
+      right: 0;
+      backface-visibility: hidden;
+      transform-origin: left;
+      transition: transform 1.5s ease-in-out;
+      text-align: center;
+      padding: 20px;
+      z-index: 5;
+    }
+
+    /* Estado abierto (folleto) */
     .open .cover {
       transform: rotateY(-180deg);
-      width: 50%;
     }
     .open .inside {
       opacity: 1;
-      transition-delay: 1.2s;
+      transform: scale(1);
+      transition-delay: 1s;
     }
 
     /* Confeti */
@@ -174,7 +175,7 @@
       position: absolute;
       bottom: 0;
       width: 400px;
-      z-index: 1; /* detrás de globos/confeti */
+      z-index: 1;
     }
     .ironman {
       left: 0;
@@ -192,6 +193,7 @@
         font-size: 1.1em;
       }
     }
+
   </style>
 </head>
 <body>
@@ -270,5 +272,6 @@
     }
     createStars();
   </script>
+
 </body>
 </html>

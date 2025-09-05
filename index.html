@@ -291,31 +291,78 @@ let fireworks = [];
 let particles = [];
 
 class Firework {
-  constructor(x,y,targetY){
-    this.x = x; this.y = y; this.targetY = targetY; this.speed = 3+Math.random()*2; this.exploded=false;
+  constructor(x, y, targetY){
+    this.x = x;
+    this.y = y;
+    this.targetY = targetY;
+    this.speed = 4 + Math.random() * 2;
+    this.exploded = false;
   }
   update() {
-    if(this.y>this.targetY) this.y-=this.speed;
-    else if(!this.exploded){ this.explode(); this.exploded=true; }
+    if(this.y > this.targetY) this.y -= this.speed;
+    else if(!this.exploded){
+      this.explode();
+      this.exploded = true;
+    }
   }
-  explode(){ for(let i=0;i<30;i++) particles.push(new Particle(this.x,this.y)); }
-  draw(){ ctx.fillStyle='white'; ctx.fillRect(this.x,this.y,2,10); }
+  explode() {
+    const numParticles = 40;
+    for(let i=0; i<numParticles; i++){
+      const angle = Math.random() * 2 * Math.PI;
+      const speed = Math.random() * 5 + 2;
+      particles.push(new Particle(this.x, this.y, Math.cos(angle)*speed, Math.sin(angle)*speed));
+    }
+  }
+  draw() {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(this.x, this.y, 2, 8);
+  }
 }
 
 class Particle {
-  constructor(x,y){ this.x=x; this.y=y; this.speedX=(Math.random()-0.5)*5; this.speedY=(Math.random()-0.5)*5; this.alpha=1; this.color=`hsl(${Math.random()*360},100%,50%)`; }
-  update(){ this.x+=this.speedX; this.y+=this.speedY; this.alpha-=0.02; }
-  draw(){ ctx.fillStyle=this.color; ctx.globalAlpha=this.alpha; ctx.fillRect(this.x,this.y,3,3); ctx.globalAlpha=1; }
+  constructor(x, y, vx, vy){
+    this.x = x;
+    this.y = y;
+    this.vx = vx;
+    this.vy = vy;
+    this.alpha = 1;
+    this.color = `hsl(${Math.random()*360}, 100%, 60%)`;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.05; // gravedad suave
+    this.alpha -= 0.02;
+  }
+  draw() {
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, 3, 3);
+    ctx.globalAlpha = 1;
+  }
 }
 
-function animate(){
+function animateFireworks(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(Math.random()<0.03) fireworks.push(new Firework(Math.random()*canvas.width,canvas.height, Math.random()*canvas.height/2));
-  fireworks.forEach((fw,i)=>{ fw.update(); fw.draw(); if(fw.exploded) fireworks.splice(i,1); });
-  particles.forEach((p,i)=>{ p.update(); p.draw(); if(p.alpha<=0) particles.splice(i,1); });
-  requestAnimationFrame(animate);
+  
+  if(Math.random() < 0.03) fireworks.push(new Firework(Math.random()*canvas.width, canvas.height, Math.random()*canvas.height/2));
+  
+  fireworks.forEach((fw,i) => {
+    fw.update();
+    fw.draw();
+    if(fw.exploded) fireworks.splice(i,1);
+  });
+
+  particles.forEach((p,i) => {
+    p.update();
+    p.draw();
+    if(p.alpha <= 0) particles.splice(i,1);
+  });
+
+  requestAnimationFrame(animateFireworks);
 }
-animate();
+
+animateFireworks();
 
 // Fuegos artificiales cielo
 const skyCanvas = document.getElementById('skyFireworks');
@@ -334,7 +381,13 @@ class SkyFirework {
     if(this.y>this.targetY) this.y-=this.speed;
     else if(!this.exploded){ this.explode(); this.exploded=true; }
   }
-  explode(){ for(let i=0;i<30;i++) skyParticles.push(new Particle(this.x,this.y)); }
+  explode(){ 
+    for(let i=0;i<30;i++){
+      const angle = Math.random()*2*Math.PI;
+      const speed = Math.random()*4 +2;
+      skyParticles.push(new Particle(this.x,this.y, Math.cos(angle)*speed, Math.sin(angle)*speed));
+    }
+  }
   draw(){ skyCtx.fillStyle='white'; skyCtx.fillRect(this.x,this.y,2,10); }
 }
 

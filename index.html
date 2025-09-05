@@ -402,11 +402,21 @@ body {
 </div>
 <canvas id="skyFireworks" style="position:absolute;top:0;left:0;width:100vw;height:100vh;z-index:0;"></canvas>
 <script>
-// Carta
+// Carta con alternancia abrir/cerrar y confeti solo la primera vez
 const card = document.getElementById("birthdayCard");
+let confettiLaunched = false;
+
 card.addEventListener("click", () => {
-  card.classList.add("open");
-  launchConfetti();
+  if (card.classList.contains("open")) {
+    card.classList.remove("open");
+    confettiLaunched = false;
+  } else {
+    card.classList.add("open");
+    if (!confettiLaunched) {
+      launchConfetti();
+      confettiLaunched = true;
+    }
+  }
 });
 
 // Confeti más abundante

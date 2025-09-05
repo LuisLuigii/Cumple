@@ -98,7 +98,7 @@ body {
 .cover {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #ff7e5f, #feb47b); /* gradiente bonito */
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* gradiente bonito */
   color: white;
   display: flex;
   justify-content: center;
@@ -118,24 +118,14 @@ body {
   overflow: hidden;
 }
 
-/* Canvas fuegos portada */
-#fireworksCover {
+/* Canvas fuegos artificiales portada */
+#fireworks {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
   z-index: 1;
-}
-
-/* Canvas fuegos cielo */
-#fireworksSky {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 0;
 }
 
 /* Estado abierto */
@@ -205,11 +195,14 @@ body {
 <img src="img/IronMan1.png" class="background-img ironman">
 <img src="img/IronMan2.png" class="background-img tony">
 
+<!-- Canvas fuegos artificiales cielo -->
+<canvas id="skyFireworks" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
+
 <!-- Carta -->
 <div class="card" id="birthdayCard">
   <div class="cover">
     🎂 ¡Feliz Cumple! 🎂
-    <canvas id="fireworksCover"></canvas>
+    <canvas id="fireworks"></canvas>
   </div>
   <div class="inside">
     <div class="inside-left">
@@ -223,23 +216,17 @@ body {
   </div>
 </div>
 
-<!-- Canvas fuegos cielo -->
-<canvas id="fireworksSky"></canvas>
-
 <script>
 // Carta
 const card = document.getElementById("birthdayCard");
 card.addEventListener("click", () => {
   card.classList.add("open");
   launchConfetti();
-  spawnPageSideBalloons();
-  spawnFireworksCover();
-  spawnFireworksSky();
 });
 
-// Confeti
+// Confeti más abundante
 function launchConfetti() {
-  for (let i = 0; i < 300; i++) {
+  for (let i = 0; i < 300; i++) { 
     const confetti = document.createElement("div");
     confetti.classList.add("confetti");
     confetti.style.top = Math.random() * window.innerHeight * 0.5 + "px";
@@ -267,102 +254,98 @@ function createStars() {
 }
 createStars();
 
-// Globos
+// Globos desde los lados de la página
 function spawnPageSideBalloons() {
-  for (let i=0; i<30; i++) {
+  setInterval(() => {
     const balloon = document.createElement('div');
     balloon.classList.add('balloon');
+
     const side = Math.random() < 0.5 ? 'left' : 'right';
     const offsetX = (Math.random() * 200 + 50); 
-    if(side === 'left') balloon.style.left = '-50px';
-    else balloon.style.right = '-50px';
-    balloon.style.setProperty('--offsetX', side==='left'? offsetX+'px': -offsetX+'px');
+    if(side === 'left') {
+      balloon.style.left = '-50px';
+      balloon.style.setProperty('--offsetX', `${offsetX}px`);
+    } else {
+      balloon.style.right = '-50px';
+      balloon.style.setProperty('--offsetX', `${-offsetX}px`);
+    }
+
     balloon.style.backgroundColor = `hsl(${Math.random()*360},70%,60%)`;
     balloon.style.width = 30 + Math.random()*20 + 'px';
     balloon.style.height = 40 + Math.random()*30 + 'px';
     balloon.style.animationDuration = (5 + Math.random()*5) + 's';
+
     document.body.appendChild(balloon);
     balloon.addEventListener('animationend', () => balloon.remove());
+  }, 300);
+}
+spawnPageSideBalloons();
+
+// Fuegos artificiales portada
+const canvas = document.getElementById('fireworks');
+const ctx = canvas.getContext('2d');
+canvas.width = 600;
+canvas.height = 500;
+
+let fireworks = [];
+let particles = [];
+
+class Firework {
+  constructor(x,y,targetY){
+    this.x = x; this.y = y; this.targetY = targetY; this.speed = 3+Math.random()*2; this.exploded=false;
   }
+  update() {
+    if(this.y>this.targetY) this.y-=this.speed;
+    else if(!this.exploded){ this.explode(); this.exploded=true; }
+  }
+  explode(){ for(let i=0;i<30;i++) particles.push(new Particle(this.x,this.y)); }
+  draw(){ ctx.fillStyle='white'; ctx.fillRect(this.x,this.y,2,10); }
 }
 
-// Fuegos portada
-function spawnFireworksCover() {
-  const canvas = document.getElementById('fireworksCover');
-  const ctx = canvas.getContext('2d');
-  canvas.width = 600;
-  canvas.height = 500;
-
-  let fireworks = [];
-  let particles = [];
-
-  class Firework {
-    constructor(x, y, targetY){
-      this.x = x; this.y = y; this.targetY = targetY;
-      this.speed = 4 + Math.random() * 2; this.exploded = false;
-    }
-    update() {
-      if(this.y > this.targetY) this.y -= this.speed;
-      else if(!this.exploded){ this.explode(); this.exploded=true; }
-    }
-    explode() {
-      for(let i=0;i<40;i++){
-        const angle = Math.random()*2*Math.PI;
-        const speed = Math.random()*5+2;
-        particles.push(new Particle(this.x,this.y,Math.cos(angle)*speed,Math.sin(angle)*speed));
-      }
-    }
-    draw() { if(!this.exploded){ ctx.fillStyle='white'; ctx.fillRect(this.x,this.y,2,8); } }
-  }
-
-  class Particle {
-    constructor(x,y,vx,vy){ this.x=x; this.y=y; this.vx=vx; this.vy=vy; this.alpha=1; this.color=`hsl(${Math.random()*360},100%,60%)`; }
-    update(){ this.x+=this.vx; this.y+=this.vy; this.vy+=0.05; this.alpha-=0.02; }
-    draw(){ ctx.globalAlpha=this.alpha; ctx.fillStyle=this.color; ctx.fillRect(this.x,this.y,3,3); ctx.globalAlpha=1; }
-  }
-
-  function animate() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    if(Math.random()<0.05 && fireworks.length<5){ fireworks.push(new Firework(Math.random()*canvas.width, canvas.height, Math.random()*canvas.height/2)); }
-    fireworks.forEach((fw,i)=>{ fw.update(); fw.draw(); if(fw.exploded) fireworks.splice(i,1); });
-    particles.forEach((p,i)=>{ p.update(); p.draw(); if(p.alpha<=0) particles.splice(i,1); });
-    if(fireworks.length>0 || particles.length>0) requestAnimationFrame(animate);
-  }
-  animate();
+class Particle {
+  constructor(x,y){ this.x=x; this.y=y; this.speedX=(Math.random()-0.5)*5; this.speedY=(Math.random()-0.5)*5; this.alpha=1; this.color=`hsl(${Math.random()*360},100%,50%)`; }
+  update(){ this.x+=this.speedX; this.y+=this.speedY; this.alpha-=0.02; }
+  draw(){ ctx.fillStyle=this.color; ctx.globalAlpha=this.alpha; ctx.fillRect(this.x,this.y,3,3); ctx.globalAlpha=1; }
 }
 
-// Fuegos cielo
-function spawnFireworksSky() {
-  const canvas = document.getElementById('fireworksSky');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  let fireworks = [];
-  let particles = [];
-
-  class Firework {
-    constructor(x,y,targetY){ this.x=x; this.y=y; this.targetY=targetY; this.speed=3+Math.random()*2; this.exploded=false; }
-    update(){ if(this.y>this.targetY) this.y-=this.speed; else if(!this.exploded){ this.explode(); this.exploded=true; } }
-    explode(){ for(let i=0;i<50;i++){ const angle=Math.random()*2*Math.PI; const speed=Math.random()*4+1; particles.push(new Particle(this.x,this.y,Math.cos(angle)*speed,Math.sin(angle)*speed)); } }
-    draw(){ if(!this.exploded){ ctx.fillStyle='white'; ctx.fillRect(this.x,this.y,2,6); } }
-  }
-
-  class Particle {
-    constructor(x,y,vx,vy){ this.x=x; this.y=y; this.vx=vx; this.vy=vy; this.alpha=1; this.color=`hsl(${Math.random()*360},100%,60%)`; }
-    update(){ this.x+=this.vx; this.y+=this.vy; this.vy+=0.02; this.alpha-=0.015; }
-    draw(){ ctx.globalAlpha=this.alpha; ctx.fillStyle=this.color; ctx.fillRect(this.x,this.y,3,3); ctx.globalAlpha=1; }
-  }
-
-  function animate(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    if(Math.random()<0.02 && fireworks.length<5){ fireworks.push(new Firework(Math.random()*canvas.width, canvas.height, Math.random()*canvas.height/3)); }
-    fireworks.forEach((fw,i)=>{ fw.update(); fw.draw(); if(fw.exploded) fireworks.splice(i,1); });
-    particles.forEach((p,i)=>{ p.update(); p.draw(); if(p.alpha<=0) particles.splice(i,1); });
-    requestAnimationFrame(animate);
-  }
-  animate();
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(Math.random()<0.03) fireworks.push(new Firework(Math.random()*canvas.width,canvas.height, Math.random()*canvas.height/2));
+  fireworks.forEach((fw,i)=>{ fw.update(); fw.draw(); if(fw.exploded) fireworks.splice(i,1); });
+  particles.forEach((p,i)=>{ p.update(); p.draw(); if(p.alpha<=0) particles.splice(i,1); });
+  requestAnimationFrame(animate);
 }
+animate();
+
+// Fuegos artificiales cielo
+const skyCanvas = document.getElementById('skyFireworks');
+const skyCtx = skyCanvas.getContext('2d');
+skyCanvas.width = window.innerWidth;
+skyCanvas.height = window.innerHeight;
+
+let skyFireworks = [];
+let skyParticles = [];
+
+class SkyFirework {
+  constructor(x,y,targetY){
+    this.x = x; this.y = y; this.targetY = targetY; this.speed = 3+Math.random()*2; this.exploded=false;
+  }
+  update() {
+    if(this.y>this.targetY) this.y-=this.speed;
+    else if(!this.exploded){ this.explode(); this.exploded=true; }
+  }
+  explode(){ for(let i=0;i<30;i++) skyParticles.push(new Particle(this.x,this.y)); }
+  draw(){ skyCtx.fillStyle='white'; skyCtx.fillRect(this.x,this.y,2,10); }
+}
+
+function animateSky(){
+  skyCtx.clearRect(0,0,skyCanvas.width, skyCanvas.height);
+  if(Math.random()<0.02) skyFireworks.push(new SkyFirework(Math.random()*skyCanvas.width, skyCanvas.height, Math.random()*skyCanvas.height/2));
+  skyFireworks.forEach((fw,i)=>{ fw.update(); fw.draw(); if(fw.exploded) skyFireworks.splice(i,1); });
+  skyParticles.forEach((p,i)=>{ p.update(); p.draw(); if(p.alpha<=0) skyParticles.splice(i,1); });
+  requestAnimationFrame(animateSky);
+}
+animateSky();
 </script>
 </body>
 </html>

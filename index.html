@@ -98,8 +98,7 @@ body {
 .cover {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-
+  background: linear-gradient(135deg, #ff6bbd, #9b5de5);
   color: white;
   display: flex;
   justify-content: center;
@@ -197,7 +196,7 @@ body {
 <img src="img/IronMan2.png" class="background-img tony">
 
 <!-- Canvas fuegos artificiales cielo -->
-<canvas id="skyFireworks" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
+<canvas id="skyFireworks" style="position:absolute;top:0;left:0;width:100vw;height:100vh;z-index:0;"></canvas>
 
 <!-- Carta -->
 <div class="card" id="birthdayCard">
@@ -333,8 +332,14 @@ animate();
 // Fuegos artificiales cielo
 const skyCanvas = document.getElementById('skyFireworks');
 const skyCtx = skyCanvas.getContext('2d');
-skyCanvas.width = window.innerWidth;
-skyCanvas.height = window.innerHeight;
+
+// Asegura que el canvas cubra toda la ventana
+function resizeSkyCanvas() {
+  skyCanvas.width = window.innerWidth;
+  skyCanvas.height = window.innerHeight;
+}
+resizeSkyCanvas();
+window.addEventListener('resize', resizeSkyCanvas);
 
 let skyFireworks = [];
 let skyParticles = [];
@@ -354,7 +359,7 @@ class SkyFirework {
 function animateSky(){
   skyCtx.clearRect(0,0,skyCanvas.width, skyCanvas.height);
 
-  // ¡AQUÍ! Genera nuevos fuegos artificiales aleatoriamente
+  // Genera nuevos fuegos artificiales aleatoriamente
   if(Math.random()<0.02) skyFireworks.push(
     new SkyFirework(
       Math.random()*skyCanvas.width,
@@ -386,6 +391,7 @@ function animateSky(){
 
   requestAnimationFrame(animateSky);
 }
+animateSky();
 </script>
 </body>
 </html>

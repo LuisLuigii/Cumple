@@ -236,30 +236,30 @@ function launchConfetti() {
   }
 }
 
-// Globos páginas internas (constantes)
-// Globos páginas internas desde los bordes
-function createPageBalloons() {
-  const inside = document.querySelector('.inside');
-  const cardRect = inside.getBoundingClientRect();
-  
+// Globos que salen de los lados de la carta
+function createSideBalloons() {
+  const card = document.getElementById('birthdayCard');
+  const rect = card.getBoundingClientRect();
+
   for (let i = 0; i < 30; i++) {
     const balloon = document.createElement('div');
     balloon.classList.add('balloon');
-    
-    // Decidir si el globo sale por izquierda o derecha
+
+    // Salida por izquierda o derecha
     const side = Math.random() < 0.5 ? 'left' : 'right';
     if(side === 'left') {
-      balloon.style.left = (cardRect.left + Math.random() * (cardRect.width / 2)) + 'px';
+      balloon.style.left = (rect.left - 50 + Math.random() * 50) + 'px'; // a la izquierda de la carta
     } else {
-      balloon.style.left = (cardRect.left + cardRect.width / 2 + Math.random() * (cardRect.width / 2)) + 'px';
+      balloon.style.left = (rect.right - 10 + Math.random() * 50) + 'px'; // a la derecha de la carta
     }
-    
+
     balloon.style.backgroundColor = `hsl(${Math.random()*360},70%,60%)`;
     balloon.style.animationDuration = (6 + Math.random()*6) + 's';
-    
+
     document.body.appendChild(balloon);
   }
 }
+
 
 
 // Estrellas fondo

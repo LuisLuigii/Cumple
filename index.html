@@ -17,7 +17,6 @@ body {
   align-items: center;
 }
 
-/* Carta estilo folleto */
 .card {
   width: 600px;
   height: 500px;
@@ -26,7 +25,6 @@ body {
   position: relative;
 }
 
-/* Portada */
 .cover {
   width: 100%;
   height: 100%;
@@ -43,7 +41,7 @@ body {
   transform-origin: left;
   transition: transform 1.5s ease-in-out;
   text-align: center;
-  padding: 0 10px;
+  padding: 0;
   z-index: 5;
   overflow: hidden;
 }
@@ -51,11 +49,13 @@ body {
 .cover-content {
   position: relative;
   z-index: 2;
+  width: 100%;
   max-width: 350px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .cover-top-text {
@@ -95,6 +95,15 @@ body {
   letter-spacing: 2px;
 }
 
+/* Canvas portada fireworks */
+#fireworks {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
 /* Estado abierto */
 .open .cover {
   transform: rotateY(-180deg);
@@ -119,7 +128,6 @@ body {
   z-index: 3;
 }
 
-/* Página izquierda */
 .inside-left {
   width: 50%;
   height: 100%;
@@ -139,7 +147,6 @@ body {
   z-index: 2;
 }
 
-/* Página derecha */
 .inside-right {
   width: 50%;
   height: 100%;
@@ -149,7 +156,7 @@ body {
   align-items: center;
   padding: 25px;
   text-align: center;
-  font-size: 1.1em; /* tamaño original */
+  font-size: 1.1em;
   color: #333;
   line-height: 1.5em;
   position: relative;
@@ -158,7 +165,7 @@ body {
 
 .inside-right p {
   margin: 0;
-  font-size: 1em; /* tamaño original */
+  font-size: 1em;
 }
 
 /* Estrellas fondo */
@@ -219,11 +226,6 @@ body {
   100% { transform: translateX(var(--offsetX)) translateY(-800px); opacity: 0; }
 }
 
-/* Imágenes de fondo */
-.background-img { position: absolute; bottom: 0; width: 300px; z-index: 1; }
-.ironman { left: 0; }
-.tony { right: 0; }
-
 @media (max-width: 700px) {
   .card { width: 90vw; height: 70vh; }
   .inside-right { font-size: 1em; }
@@ -232,7 +234,6 @@ body {
 </head>
 <body>
 
-<!-- Canvas fuegos artificiales cielo -->
 <canvas id="skyFireworks" style="position:absolute;top:0;left:0;width:100vw;height:100vh;z-index:0;"></canvas>
 
 <div class="card" id="birthdayCard">
@@ -365,8 +366,8 @@ spawnPageSideBalloons();
 // Fuegos artificiales portada
 const canvas = document.getElementById('fireworks');
 const ctx = canvas.getContext('2d');
-canvas.width = 600;
-canvas.height = 500;
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
 
 let fireworks = [];
 let particles = [];
@@ -414,7 +415,6 @@ animate();
 const skyCanvas = document.getElementById('skyFireworks');
 const skyCtx = skyCanvas.getContext('2d');
 
-// Asegura que el canvas cubra toda la ventana
 function resizeSkyCanvas() {
   skyCanvas.width = window.innerWidth;
   skyCanvas.height = window.innerHeight;
@@ -440,7 +440,6 @@ class SkyFirework {
 function animateSky(){
   skyCtx.clearRect(0,0,skyCanvas.width, skyCanvas.height);
 
-  // Genera nuevos fuegos artificiales aleatoriamente
   if(Math.random()<0.02) skyFireworks.push(
     new SkyFirework(
       Math.random()*skyCanvas.width,
@@ -449,7 +448,6 @@ function animateSky(){
     )
   );
 
-  // Actualiza y dibuja los fuegos artificiales
   for (let i = skyFireworks.length - 1; i >= 0; i--) {
     const fw = skyFireworks[i];
     fw.update();
@@ -460,7 +458,6 @@ function animateSky(){
     }
   }
 
-  // Actualiza y dibuja las partículas
   for (let i = skyParticles.length - 1; i >= 0; i--) {
     const p = skyParticles[i];
     p.update();

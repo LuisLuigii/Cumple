@@ -16,6 +16,43 @@
       position: relative;
     }
 
+    /* Fondo de velitas */
+    .candles {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 200px;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .candle {
+      width: 20px;
+      height: 80px;
+      background: linear-gradient(to top, #ffb347, #ffcc33);
+      border-radius: 5px;
+      position: relative;
+    }
+    .flame {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      width: 20px;
+      height: 30px;
+      background: radial-gradient(circle, #ffec85 20%, #ffae34 60%, rgba(255, 87, 34, 0.8) 100%);
+      border-radius: 50% 50% 50% 50%;
+      transform: translateX(-50%);
+      animation: flicker 1s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); opacity: 1; }
+      50% { transform: translateX(-50%) scale(1.2); opacity: 0.8; }
+      100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    }
+
     /* Carta */
     .card {
       width: 600px;
@@ -23,11 +60,13 @@
       perspective: 2000px;
       cursor: pointer;
       position: relative;
+      display: flex;
+      z-index: 5;
     }
 
-    /* Portada ocupa todo el ancho al inicio */
+    /* Portada */
     .cover {
-      width: 100%;
+      width: 50%;
       height: 100%;
       background: linear-gradient(135deg, #ff6b6b, #feca57);
       color: white;
@@ -36,7 +75,7 @@
       align-items: center;
       font-size: 1.8em;
       font-weight: bold;
-      border-radius: 15px;
+      border-radius: 0 15px 15px 0;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       position: absolute;
       right: 0;
@@ -45,33 +84,19 @@
       transition: transform 1.5s ease-in-out;
       text-align: center;
       padding: 20px;
-      z-index: 2;
-    }
-
-    /* Interior contenedor */
-    .inside {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      overflow: hidden;
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
-
-    .inside-left, .inside-right {
-      width: 50%;
-      height: 100%;
     }
 
     /* Página izquierda (foto) */
     .inside-left {
+      width: 50%;
+      height: 100%;
       background: #fff;
+      border-radius: 15px 0 0 15px;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 15px;
+      overflow: hidden;
     }
     .inside-left img {
       max-width: 100%;
@@ -82,7 +107,11 @@
 
     /* Página derecha (mensaje) */
     .inside-right {
+      width: 50%;
+      height: 100%;
       background: white;
+      border-radius: 0 15px 15px 0;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -90,16 +119,16 @@
       text-align: center;
       font-size: 1.3em;
       color: #333;
+      opacity: 0;
+      transition: opacity 1s ease;
       line-height: 1.5em;
     }
 
-    /* Al abrir */
+    /* Estado abierto */
     .open .cover {
       transform: rotateY(-180deg);
-      width: 50%;
-      border-radius: 0 15px 15px 0;
     }
-    .open .inside {
+    .open .inside-right {
       opacity: 1;
       transition-delay: 1.2s;
     }
@@ -154,10 +183,14 @@
       position: absolute;
       bottom: 0;
       width: 400px;
-      z-index: 1;
+      z-index: 1; /* detrás de globos/confeti */
     }
-    .ironman { left: 0; }
-    .tony { right: 0; }
+    .ironman {
+      left: 0;
+    }
+    .tony {
+      right: 0;
+    }
 
     /* Responsive */
     @media (max-width: 700px) {
@@ -173,22 +206,29 @@
 </head>
 <body>
 
-  <!-- Fondo decorativo -->
+  <!-- Fondo decorativo con velitas -->
+  <div class="candles">
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+  </div>
+
+  <!-- Fondo decorativo personajes -->
   <img src="img/IronMan1.png" alt="Ironman" class="background-img ironman">
   <img src="img/IronMan2.png" alt="Tony Stark" class="background-img tony">
 
   <!-- Carta -->
   <div class="card" id="birthdayCard">
     <div class="cover">🎂 ¡Feliz Cumple! 🎂</div>
-    <div class="inside">
-      <div class="inside-left">
-        <img src="img/MiMujer.jpeg" alt="Foto de mi novia">
-      </div>
-      <div class="inside-right">
-        <p>✨ Feliz cumpleaños mi amor ❤️ ✨<br><br>
-        Que este día esté lleno de alegría, amor y momentos inolvidables.<br>
-        Gracias por ser la mejor parte de mi vida 💕</p>
-      </div>
+    <div class="inside-left">
+      <img src="img/MiMujer.jpeg" alt="Foto de mi novia">
+    </div>
+    <div class="inside-right">
+      <p>✨ Feliz cumpleaños mi amor ❤️ ✨<br><br>
+      Que este día esté lleno de alegría, amor y momentos inolvidables.<br>
+      Gracias por ser la mejor parte de mi vida 💕</p>
     </div>
   </div>
 
@@ -203,7 +243,7 @@
 
     // Confeti
     function launchConfetti() {
-      for (let i = 0; i < 150; i++) {
+      for (let i = 0; i < 150; i++) { 
         const confetti = document.createElement("div");
         confetti.classList.add("confetti");
         confetti.style.left = Math.random() * window.innerWidth + "px";

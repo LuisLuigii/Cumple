@@ -30,7 +30,7 @@ body {
 .cover {
   width: 100%;
   height: 100%;
-  background: #ffc0cb; /* rosita igual que la página interna */
+  background: #ffc0cb;
   color: #222;
   display: flex;
   justify-content: center;
@@ -43,7 +43,7 @@ body {
   transform-origin: left;
   transition: transform 1.5s ease-in-out;
   text-align: center;
-  padding: 20px;
+  padding: 0 10px;
   z-index: 5;
   overflow: hidden;
 }
@@ -51,7 +51,8 @@ body {
 .cover-content {
   position: relative;
   z-index: 2;
-  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -122,7 +123,7 @@ body {
 .inside-left {
   width: 50%;
   height: 100%;
-  background: #ffc0cb; /* rosa */
+  background: #ffc0cb;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -142,13 +143,13 @@ body {
 .inside-right {
   width: 50%;
   height: 100%;
-  background: #ffc0cb; /* rosa */
+  background: #ffc0cb;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 25px;
   text-align: center;
-  font-size: 1.3em;
+  font-size: 1.1em; /* tamaño original */
   color: #333;
   line-height: 1.5em;
   position: relative;
@@ -157,7 +158,7 @@ body {
 
 .inside-right p {
   margin: 0;
-  font-size: 1.1em;
+  font-size: 1em; /* tamaño original */
 }
 
 /* Estrellas fondo */
@@ -225,17 +226,11 @@ body {
 
 @media (max-width: 700px) {
   .card { width: 90vw; height: 70vh; }
-  .inside-right { font-size: 1.1em; }
+  .inside-right { font-size: 1em; }
 }
 </style>
 </head>
 <body>
-
-<!-- Personajes (puedes quitar estas imágenes si no las necesitas) -->
-<!--
-<img src="img/IronMan1.png" class="background-img ironman">
-<img src="img/IronMan2.png" class="background-img tony">
--->
 
 <!-- Canvas fuegos artificiales cielo -->
 <canvas id="skyFireworks" style="position:absolute;top:0;left:0;width:100vw;height:100vh;z-index:0;"></canvas>

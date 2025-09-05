@@ -353,6 +353,15 @@ class SkyFirework {
 function animateSky(){
   skyCtx.clearRect(0,0,skyCanvas.width, skyCanvas.height);
 
+  // ¡AQUÍ! Genera nuevos fuegos artificiales aleatoriamente
+  if(Math.random()<0.02) skyFireworks.push(
+    new SkyFirework(
+      Math.random()*skyCanvas.width,
+      skyCanvas.height,
+      Math.random()*skyCanvas.height/2
+    )
+  );
+
   // Actualiza y dibuja los fuegos artificiales
   for (let i = skyFireworks.length - 1; i >= 0; i--) {
     const fw = skyFireworks[i];
@@ -376,7 +385,6 @@ function animateSky(){
 
   requestAnimationFrame(animateSky);
 }
-animateSky();
 </script>
 </body>
 </html>

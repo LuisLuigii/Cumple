@@ -29,76 +29,63 @@ body {
 }
 .ironman {
   left: 0;
-  width: 180px;
-  max-width: 35vw;
+  width: 120px;
+  max-width: 28vw;
 }
 .tony {
   right: 0;
-  width: 180px;
-  max-width: 35vw;
+  width: 120px;
+  max-width: 28vw;
 }
 
 @media (max-width: 900px) {
   .ironman, .tony {
-    width: 110px;
-    max-width: 28vw;
+    width: 80px;
+    max-width: 20vw;
   }
 }
 @media (max-width: 700px) {
   .ironman, .tony {
-    width: 70px;
-    max-width: 22vw;
-  }
-}
-@media (max-width: 500px) {
-  .ironman, .tony {
-    width: 45px;
-    max-width: 18vw;
-  }
-}
-@media (max-width: 400px) {
-  .ironman, .tony {
-    width: 32px;
-    max-width: 15vw;
+    width: 50px;
+    max-width: 14vw;
   }
 }
 
 /* Carta */
 .card {
-  width: 600px;
-  height: 500px;
+  width: 480px;
+  height: 400px;
   perspective: 2000px;
   cursor: pointer;
   position: relative;
   z-index: 3;
   background: none;
-  /* Espacio lateral para las imágenes en móvil */
   margin-left: 0;
   margin-right: 0;
+  transition: width 0.3s, height 0.3s;
 }
 @media (max-width: 900px) {
-  .card { width: 90vw; height: 70vw; min-width: 260px; min-height: 340px; }
+  .card { width: 70vw; height: 60vw; min-width: 220px; min-height: 220px; }
 }
 @media (max-width: 700px) {
+  body { align-items: flex-end; }
   .card {
-    width: 90vw;
-    height: 70vh;
-    margin-left: 38px;
-    margin-right: 38px;
+    width: 94vw;
+    height: 62vw;
     min-width: 0;
     min-height: 0;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 98vw;
+    max-height: 80vh;
   }
 }
 @media (max-width: 500px) {
   .card {
-    margin-left: 24px;
-    margin-right: 24px;
-  }
-}
-@media (max-width: 400px) {
-  .card {
-    margin-left: 12px;
-    margin-right: 12px;
+    width: 98vw;
+    height: 70vw;
+    max-width: 99vw;
+    max-height: 80vh;
   }
 }
 
@@ -161,13 +148,13 @@ body {
 }
 
 .cover-happy {
-  font-size: 2.2em;
+  font-size: 2em;
   color: #222;
   font-weight: 700;
   letter-spacing: 2px;
 }
 .cover-birthday {
-  font-size: 2em;
+  font-size: 1.3em;
   color: #00c853;
   font-weight: 700;
   letter-spacing: 2px;
@@ -213,16 +200,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  padding: 10px;
   overflow: hidden;
   position: relative;
 }
 .inside-left img {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 98%;
+  max-height: 98%;
   border-radius: 10px;
   object-fit: cover;
   z-index: 2;
+  box-shadow: 0 2px 8px #0002;
 }
 
 .inside-right {
@@ -232,18 +220,43 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 25px;
+  padding: 10px;
   text-align: center;
-  font-size: 1.1em;
+  font-size: 1em;
   color: #333;
-  line-height: 1.5em;
+  line-height: 1.4em;
   position: relative;
   z-index: 2;
+  word-break: break-word;
 }
 
 .inside-right p {
   margin: 0;
-  font-size: 1em;
+  font-size: 0.98em;
+  line-height: 1.4em;
+  word-break: break-word;
+}
+
+@media (max-width: 700px) {
+  .inside {
+    flex-direction: column;
+  }
+  .inside-left, .inside-right {
+    width: 100%;
+    height: 50%;
+    padding: 6px;
+  }
+  .inside-left img {
+    max-width: 90vw;
+    max-height: 90%;
+  }
+  .inside-right {
+    font-size: 0.95em;
+    padding: 8px;
+  }
+  .inside-right p {
+    font-size: 0.93em;
+  }
 }
 
 /* Estrellas fondo */

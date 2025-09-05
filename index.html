@@ -13,20 +13,22 @@
       background: #fef9f4;
       font-family: 'Poppins', sans-serif;
       overflow: hidden;
-    }
-
-    /* Contenedor de la carta */
-    .card {
-      width: 320px;
-      height: 520px;
-      perspective: 2000px;
-      cursor: pointer;
       position: relative;
     }
 
-    /* Portada */
+    /* Carta completa con 2 páginas */
+    .card {
+      width: 600px;
+      height: 500px;
+      perspective: 2000px;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+    }
+
+    /* Portada (lado derecho) */
     .cover {
-      width: 100%;
+      width: 50%;
       height: 100%;
       background: linear-gradient(135deg, #ff6b6b, #feca57);
       color: white;
@@ -35,9 +37,10 @@
       align-items: center;
       font-size: 1.8em;
       font-weight: bold;
-      border-radius: 15px;
+      border-radius: 0 15px 15px 0;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       position: absolute;
+      right: 0;
       backface-visibility: hidden;
       transform-origin: left;
       transition: transform 1.5s ease-in-out;
@@ -45,12 +48,31 @@
       padding: 20px;
     }
 
-    /* Interior de la carta */
-    .inside {
-      width: 100%;
+    /* Página izquierda (foto) */
+    .inside-left {
+      width: 50%;
+      height: 100%;
+      background: #fff;
+      border-radius: 15px 0 0 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      overflow: hidden;
+    }
+    .inside-left img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    /* Página derecha (mensaje) */
+    .inside-right {
+      width: 50%;
       height: 100%;
       background: white;
-      border-radius: 15px;
+      border-radius: 0 15px 15px 0;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       display: flex;
       justify-content: center;
@@ -64,11 +86,11 @@
       line-height: 1.5em;
     }
 
-    /* Cuando se abre */
+    /* Estado abierto */
     .open .cover {
       transform: rotateY(-180deg);
     }
-    .open .inside {
+    .open .inside-right {
       opacity: 1;
       transition-delay: 1.2s;
     }
@@ -79,10 +101,10 @@
       top: -10px;
       width: 10px;
       height: 10px;
-      background-color: red;
-      opacity: 0.7;
       border-radius: 50%;
+      opacity: 0.8;
       animation: fall 3s linear forwards;
+      z-index: 10;
     }
     @keyframes fall {
       to {
@@ -97,9 +119,9 @@
       bottom: -150px;
       width: 60px;
       height: 80px;
-      background: red;
       border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
       animation: rise 6s ease-in-out forwards;
+      z-index: 10;
     }
     .balloon::after {
       content: '';
@@ -118,28 +140,46 @@
       }
     }
 
-    /* Responsive para móviles */
-    @media (max-width: 600px) {
+    /* Imágenes de fondo (Ironman y Tony Stark) */
+    .background-img {
+      position: absolute;
+      bottom: 0;
+      width: 180px;
+      opacity: 0.25; /* semitransparente */
+      z-index: 1; /* detrás de globos/confeti */
+    }
+    .ironman {
+      left: 0;
+    }
+    .tony {
+      right: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
       .card {
-        width: 90vw;
+        width: 95vw;
         height: 70vh;
       }
-      .cover {
-        font-size: 2em;
-        padding: 30px;
-      }
-      .inside {
-        font-size: 1.5em;
-        padding: 30px;
+      .inside-right {
+        font-size: 1.1em;
       }
     }
   </style>
 </head>
 <body>
 
+  <!-- Fondo decorativo -->
+  <img src="ironman.png" alt="Ironman" class="background-img ironman">
+  <img src="tony.png" alt="Tony Stark" class="background-img tony">
+
+  <!-- Carta -->
   <div class="card" id="birthdayCard">
     <div class="cover">🎂 ¡Feliz Cumple! 🎂</div>
-    <div class="inside">
+    <div class="inside-left">
+      <img src="novia.jpg" alt="Foto de mi novia">
+    </div>
+    <div class="inside-right">
       <p>✨ Feliz cumpleaños mi amor ❤️ ✨<br><br>
       Que este día esté lleno de alegría, amor y momentos inolvidables.<br>
       Gracias por ser la mejor parte de mi vida 💕</p>
@@ -155,9 +195,9 @@
       releaseBalloons();
     });
 
-    // Confeti aleatorio
+    // Confeti
     function launchConfetti() {
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 150; i++) { // más confeti
         const confetti = document.createElement("div");
         confetti.classList.add("confetti");
         confetti.style.left = Math.random() * window.innerWidth + "px";
@@ -170,7 +210,7 @@
 
     // Globos
     function releaseBalloons() {
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 20; i++) { // más globos
         const balloon = document.createElement("div");
         balloon.classList.add("balloon");
         balloon.style.left = Math.random() * window.innerWidth + "px";
@@ -184,4 +224,3 @@
 
 </body>
 </html>
-
